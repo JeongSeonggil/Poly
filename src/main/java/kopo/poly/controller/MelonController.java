@@ -110,10 +110,10 @@ public class MelonController {
         return msg;
     }
 
-    @GetMapping(value = "/melon/btsaddnickname")
-    public String btsAddField() throws Exception {
+    @GetMapping(value = "/melon/bts-change-nickname")
+    public String btsChangeField() throws Exception {
 
-        log.info(this.getClass().getName() + ".btsAddNickname Start!");
+        log.info(this.getClass().getName() + ".btsChangeNickname Start!");
 
         String msg;
 
@@ -127,11 +127,60 @@ public class MelonController {
             msg = "fail";
         }
 
-        log.info(this.getClass().getName() + ".btsAddNickname End!");
+        log.info(this.getClass().getName() + ".btsChangeNickname End!");
 
 
         return msg;
 
+    }
+
+    @GetMapping("/melon/bts-add-nickname")
+    public String btsAddField() throws Exception {
+        log.info(this.getClass().getName() + ".btsAddNickName Start!");
+
+        int res = 0;
+
+        String msg;
+
+        res = melonService.updateAddBTSNickname();
+
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
         }
+
+
+        log.info(this.getClass().getName() + ".btsAddNicName End!");
+
+
+        return msg;
+    }
+
+
+    @GetMapping(value = "/melon/bts-add-member")
+    public String btsAddMember() throws Exception {
+
+        log.info(this.getClass().getName() + ".btsAddMember Start!");
+
+        String msg;
+
+        int res = melonService.updateAddBTSMember();
+
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+
+        log.info(this.getClass().getName() + ".btsAddMember End!");
+
+
+        return msg;
+    }
+
 }
 

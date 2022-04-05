@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,55 @@ import java.util.Map;
 @Slf4j
 @Service("MelonService")
 public class MelonService implements IMelonService {
+
+
+    @Override
+    public int updateAddBTSMember() throws Exception {
+
+        log.info(this.getClass().getName() + ".updateAddBTSMember Start!");
+        int res = 0;
+        String singer = null;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        melonMapper.dropMelonCollection(colNm);
+
+        if (this.collectMelonSong() == 1) {
+            singer = "방탄소년단";
+
+        }
+        String[] member = {"정국", "뷔", "지민", "슈가", "진", "제이홉", "RM"};
+        res = melonMapper.updateSongAddListField(colNm, singer, Arrays.asList(member));
+
+        log.info(this.getClass().getName() + ".updateAddBTSMember End!");
+        return res;
+    }
+
+    @Override
+    public int updateAddBTSNickname() throws Exception {
+        log.info(this.getClass().getName() + ".updateAddBTSNickname Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        melonMapper.dropMelonCollection(colNm);
+
+
+        if (this.collectMelonSong() == 1) {
+            String singer = "방탄소년단";
+
+            String nickname = "BTS";
+
+
+            res = melonMapper.updateSongAddField(colNm, singer, nickname);
+        }
+
+
+        log.info(this.getClass().getName() + ".updateAddBTSNickname End!");
+
+        return res;
+    }
 
     @Resource(name = "MelonMapper")
     private IMelonMapper melonMapper; // MongoDB에 저장할 Mapper

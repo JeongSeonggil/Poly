@@ -15,9 +15,68 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static com.mongodb.client.model.Updates.set;
+
 @Slf4j
 @Component("MelonMapper")
 public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
+
+
+	@Override
+	public int updateSongAddListField(String pColNm, String pSinger, List<String> pMember) throws Exception {
+
+		log.info(this.getClass().getName() + ".updateSongAddListField Start!");
+
+		int res = 0;
+
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+		log.info("pColNm : " + pColNm);
+		log.info("pSinger : " + pSinger);
+
+
+		Document query = new Document();
+		query.append("singer", pSinger);
+
+		FindIterable<Document> rs = col.find(query);
+
+		rs.forEach(e -> {
+			col.updateOne(e, set("member", pMember));
+
+		});
+			res = 1;
+
+
+		return res;
+	}
+
+	@Override
+	public int updateSongAddField(String pColNm, String pSinger, String pNickname) throws Exception {
+		log.info(this.getClass().getName() + ".updateSongAddField Start!");
+
+		int res = 0;
+
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+		log.info("pColNm : " + pColNm);
+		log.info("pSinger : " + pSinger);
+
+
+		Document query = new Document();
+		query.append("singer", pSinger);
+
+
+		FindIterable<Document> rs = col.find(query);
+
+
+		rs.forEach(e -> {
+			col.updateOne(e, set("nickname", pNickname));
+		});
+
+		res = 1;
+
+		log.info(this.getClass().getName() + "updateSongAddField End!");
+		return res;
+	}
 
 	@Override
 	public int dropMelonCollection(String pColNm) throws Exception {
@@ -48,7 +107,7 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 		Document query = new Document(); // WHERE
 		query.append("singer", pSinger);
 
-		FindIterable<Document> rs = col.find(query);
+		FindIterable<Document> rs = col.find(query); // 조회
 
 		rs.forEach(e -> col.updateOne(e, new Document("$set", new Document("singer", "BTS"))));
 
