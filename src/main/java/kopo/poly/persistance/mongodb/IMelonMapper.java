@@ -38,4 +38,9 @@ public interface IMelonMapper {
 
 	int insertMany(List<MelonDTO> pList, String conNm) throws Exception;
 
+
+	int updateSong(String pColNm, String pSinger, String pUpdateSinger) throws Exception;
+
+	int dropMelonCollection(String pColNm) throws Exception;
+
 }

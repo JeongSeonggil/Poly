@@ -35,6 +35,8 @@ public abstract class AbstractMongoDBComon {
 
         boolean res = false;
 
+
+
         // 기존에 등록된 컬렉션 이름이 존재하는지 체크하고, 컬렉션이 없는 경우 생성함
         if (!mongodb.collectionExists(colNm)) {
 
@@ -59,6 +61,18 @@ public abstract class AbstractMongoDBComon {
 
         return res;
 
+    }
+
+    protected boolean dropCollection(String colNm) {
+
+        boolean res = false;
+        // 컬렉션 삭제
+        if (mongodb.collectionExists(colNm)) {
+            mongodb.dropCollection(colNm);
+            res = true;
+        }
+
+        return res;
     }
 
 }

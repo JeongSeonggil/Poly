@@ -20,6 +20,48 @@ import java.util.*;
 public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 
 	@Override
+	public int dropMelonCollection(String pColNm) throws Exception {
+		log.info(this.getClass().getName() + ".dropMelonCollection Start!");
+
+		int res = 0;
+
+		super.dropCollection(pColNm);
+
+		res = 1;
+
+		log.info(this.getClass().getName() + ".dropMelonCollection End!");
+
+		return res;
+
+	}
+
+	@Override
+	public int updateSong(String pColNm, String pSinger, String pUpdateSinger) throws Exception {
+		log.info(this.getClass().getName() + ".updateSong Start!");
+
+		int res = 0;
+
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+		log.info("pColNm : " + pColNm);
+
+		Document query = new Document(); // WHERE
+		query.append("singer", pSinger);
+
+		FindIterable<Document> rs = col.find(query);
+
+		rs.forEach(e -> col.updateOne(e, new Document("$set", new Document("singer", "BTS"))));
+
+
+		res = 1;
+
+		log.info(this.getClass().getName() + ".updateSong End");
+
+
+		return res;
+	}
+
+	@Override
 	public int insertSong(List<MelonDTO> pList, String colNm) throws Exception {
 
 		log.info(this.getClass().getName() + ".insertSong Start!");

@@ -109,4 +109,29 @@ public class MelonController {
 
         return msg;
     }
+
+    @GetMapping(value = "/melon/btsaddnickname")
+    public String btsAddField() throws Exception {
+
+        log.info(this.getClass().getName() + ".btsAddNickname Start!");
+
+        String msg;
+
+        int res = melonService.updateBTSName();
+
+
+        if (res == 1) {
+            msg = "success";
+
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".btsAddNickname End!");
+
+
+        return msg;
+
+        }
 }
+
