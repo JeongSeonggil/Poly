@@ -11,5 +11,4 @@ public class MelonDTO {
     String song; // 노래 제목
     String singer; // 가수
     int singerCnt; // 가수 별 노래 수
-
 }

@@ -3,7 +3,11 @@ package kopo.poly.controller;
 import kopo.poly.dto.MelonDTO;
 import kopo.poly.service.IMelonService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -21,6 +25,13 @@ public class MelonController {
     // Map 객체를 사용한 데이터 처리
     @Resource(name = "MelonService")
     private IMelonService melonService;
+
+    private ModelMapper modelMapper;
+
+    @Autowired
+    public MelonController(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     /**
      * 멜론 노래 리스트 저장하기
@@ -182,7 +193,7 @@ public class MelonController {
         return msg;
     }
 
-    
+
     @GetMapping(value = "/melon/deleteSong")
     public String deleteSong() throws Exception {
         log.info(this.getClass().getName() + ".deleteSong Start!");
@@ -198,8 +209,28 @@ public class MelonController {
         }
 
         log.info(this.getClass().getName() + ".deleteSong End!");
-
         return msg;
+    }
+
+    @GetMapping("/password/{password}")
+    public String password(@PathVariable String password) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        log.info("password : " + password);
+        return passwordEncoder.encode(password);
+    }
+
+    @GetMapping("/password-check/{encPassword}")
+    public boolean passwordCheck(@PathVariable String encPassword) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        log.info("password : " + encPassword);
+        boolean check = passwordEncoder.matches("1234", encPassword);
+
+        log.info("check : " + check);
+
+
+        return check;
+
+
     }
 }
 
