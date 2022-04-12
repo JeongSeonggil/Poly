@@ -46,4 +46,6 @@ public interface IMelonMapper {
 	int updateSongAddField(String pColNm, String pSinger, String pNickname) throws Exception;
 
 	int updateSongAddListField(String pColNm, String pSinger, List<String> pMember) throws Exception;
+
+	int deleteSong(String pColNm, String singer) throws Exception;
 }

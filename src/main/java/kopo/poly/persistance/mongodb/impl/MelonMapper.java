@@ -23,6 +23,30 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 
 
 	@Override
+	public int deleteSong(String pColNm, String singer) throws Exception {
+		log.info(this.getClass().getName() + "deleteSong Start!");
+
+		int res = 0;
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+		Document query = new Document();
+		query.append("singer", singer);
+
+		FindIterable<Document> rs = col.find(query);
+
+		rs.forEach(e -> {
+			col.deleteOne(e);
+		});
+
+		res = 1;
+
+		log.info(this.getClass().getName() + ".deleteSong End!");
+
+
+		return res;
+	}
+
+	@Override
 	public int updateSongAddListField(String pColNm, String pSinger, List<String> pMember) throws Exception {
 
 		log.info(this.getClass().getName() + ".updateSongAddListField Start!");

@@ -182,5 +182,24 @@ public class MelonController {
         return msg;
     }
 
+    
+    @GetMapping(value = "/melon/deleteSong")
+    public String deleteSong() throws Exception {
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        String msg;
+
+        int res = melonService.deleteSong();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
+
+        return msg;
+    }
 }
 

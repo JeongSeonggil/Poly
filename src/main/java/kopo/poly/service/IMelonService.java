@@ -32,4 +32,6 @@ public interface IMelonService {
     int updateAddBTSNickname() throws Exception;
 
     int updateAddBTSMember() throws Exception;
+
+    int deleteSong() throws Exception;
 }
