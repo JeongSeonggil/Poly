@@ -3,6 +3,7 @@ package kopo.poly.study.controller;
 import kopo.poly.study.UserMapper;
 import kopo.poly.study.dto.MailDto;
 import kopo.poly.study.dto.UserDto;
+import kopo.poly.study.service.impl.AsyncService;
 import kopo.poly.study.service.impl.MailService;
 import kopo.poly.study.service.impl.UserService;
 import kopo.poly.study.vo.RequestUser;
@@ -21,12 +22,14 @@ public class UserController {
     private UserService userService;
     private ModelMapper mapper;
     private MailService mailService;
+    private AsyncService asyncService;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper mapper, MailService mailService) {
+    public UserController(UserService userService, ModelMapper mapper, MailService mailService, AsyncService asyncService) {
         this.userService = userService;
         this.mapper = mapper;
         this.mailService = mailService;
+        this.asyncService = asyncService;
     }
 
     @PostMapping("/createUser")
@@ -45,7 +48,7 @@ public class UserController {
         return responseUser;
     }
 
-    @GetMapping("/Test")
+    @GetMapping("/send-mail")
     public void test() throws Exception {
         log.info(this.getClass().getName() + "Test Start!");
 
@@ -58,5 +61,28 @@ public class UserController {
 
         log.info(this.getClass().getName() + "Test End!");
 
+    }
+
+    @GetMapping("/async-test")
+    public void AsyncTest() throws Exception {
+        log.info(this.getClass().getName() + ".Async Start!");
+
+        String Async = asyncService.AsyncMethod();
+        String NotAsync = asyncService.NotAsyncMethod();
+
+        log.info("Async : " + Async);
+        log.info("NotAsync : " + NotAsync);
+
+        log.info(this.getClass().getName() + ".Async End!");
+
+    }
+
+    @GetMapping("/get-async")
+    public String GetAsync() throws Exception {
+        log.info(this.getClass().getName() + ".GetAsync Start!");
+
+        log.info(this.getClass().getName() + ".GetAsync End!");
+
+        return "Async : " + AsyncService.Async;
     }
 }
