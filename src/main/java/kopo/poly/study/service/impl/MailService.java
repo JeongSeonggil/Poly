@@ -1,6 +1,5 @@
 package kopo.poly.study.service.impl;
 
-import kopo.poly.study.dto.MailDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -20,8 +19,9 @@ public class MailService {
     public MailService(Environment env) {
         this.env = env;
     }
+
     @Async // 비동기 처리
-    public void sendMail(MailDto mailDto) {
+    public void sendMail(String mailAddress, String title, String mailMessage) {
         /**
          * Gmail Setting
          * 2단계 인증 활성화 And 웹 비밀번호 발급
@@ -32,9 +32,9 @@ public class MailService {
         log.info(this.getClass().getName() + ".SendMail Start!");
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(env.getProperty("spring.mail.username"));
-        message.setTo(mailDto.getMailAddress());
-        message.setSubject(mailDto.getTitle());
-        message.setText(mailDto.getMailMessage());
+        message.setTo(mailAddress);
+        message.setSubject(title);
+        message.setText(mailMessage);
 
         javaMailSender.send(message);
 

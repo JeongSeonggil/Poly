@@ -1,7 +1,6 @@
 package kopo.poly.study.controller;
 
 import kopo.poly.study.UserMapper;
-import kopo.poly.study.dto.MailDto;
 import kopo.poly.study.dto.UserDto;
 import kopo.poly.study.service.impl.AsyncService;
 import kopo.poly.study.service.impl.MailService;
@@ -21,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private UserService userService;
     private ModelMapper mapper;
-    private MailService mailService;
     private AsyncService asyncService;
+    private MailService mailService;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper mapper, MailService mailService, AsyncService asyncService) {
+    public UserController(UserService userService, ModelMapper mapper, AsyncService asyncService, MailService mailService) {
         this.userService = userService;
         this.mapper = mapper;
-        this.mailService = mailService;
         this.asyncService = asyncService;
+        this.mailService = mailService;
     }
 
     @PostMapping("/createUser")
@@ -52,20 +51,15 @@ public class UserController {
     public void test() throws Exception {
         log.info(this.getClass().getName() + "Test Start!");
 
-        MailDto mailDto = new MailDto();
-        mailDto.setMailAddress("dataofsg02@naver.com");
-        mailDto.setTitle("Mail Title");
-        mailDto.setMailMessage("Mail Massage");
-
-        mailService.sendMail(mailDto);
+        mailService.sendMail("dataofsg02@naver.com", "Mail Title", "Mail Massage");
 
         log.info(this.getClass().getName() + "Test End!");
 
     }
 
     @GetMapping("/async-test")
-    public void AsyncTest() throws Exception {
-        log.info(this.getClass().getName() + ".Async Start!");
+    public void TestAsync() throws Exception {
+        log.info(this.getClass().getName() + ".TestAsync Start!");
 
         String Async = asyncService.AsyncMethod();
         String NotAsync = asyncService.NotAsyncMethod();
@@ -73,11 +67,11 @@ public class UserController {
         log.info("Async : " + Async);
         log.info("NotAsync : " + NotAsync);
 
-        log.info(this.getClass().getName() + ".Async End!");
+        log.info(this.getClass().getName() + ".TestAsync End!");
 
     }
 
-    @GetMapping("/get-async")
+    @GetMapping("/async-get")
     public String GetAsync() throws Exception {
         log.info(this.getClass().getName() + ".GetAsync Start!");
 
