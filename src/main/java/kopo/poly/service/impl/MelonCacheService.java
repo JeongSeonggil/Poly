@@ -19,7 +19,8 @@ import java.util.Map;
 
 @Slf4j
 @Service("MelonCacheService")
-public class MelonCacheService implements IMelonCacheService {
+public class
+MelonCacheService implements IMelonCacheService {
 
     @Resource(name = "MelonMapper")
     private IMelonMapper melonMapper; // MongoDB에 저장할 Mapper

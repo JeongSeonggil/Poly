@@ -92,4 +92,20 @@ public class MyRedisMapper implements IMyRedisMapper{
         return res;
 
     }
+
+    @Override
+    public RedisDTO getRedisStringJSON(String redisKey) throws Exception {
+        RedisDTO redisDTO = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            redisDTO = (RedisDTO) redisDB.opsForValue().get(redisKey);
+        }
+
+
+        return redisDTO;
+    }
 }

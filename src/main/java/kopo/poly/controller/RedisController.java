@@ -60,4 +60,11 @@ public class RedisController {
 
         return msg;
     }
+
+    @GetMapping(value = "/redis/getRedisStringJSON")
+    public RedisDTO getRedisStringJSON() throws Exception {
+        RedisDTO redisDTO = myRedisService.getRedisStringJSON();
+
+        return redisDTO;
+    }
 }

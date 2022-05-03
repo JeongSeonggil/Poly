@@ -61,4 +61,18 @@ public class MyRedisService implements IMyRedisService {
 
         return res;
     }
+
+    @Override
+    public RedisDTO getRedisStringJSON() throws Exception {
+        String redisKey = "Key_String_JSON";
+
+        RedisDTO redisDTO = myRedisMapper.getRedisStringJSON(redisKey);
+
+        if (redisDTO == null) {
+            redisDTO = new RedisDTO();
+        }
+
+
+        return redisDTO;
+    }
 }

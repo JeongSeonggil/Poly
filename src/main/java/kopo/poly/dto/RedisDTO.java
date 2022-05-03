@@ -9,5 +9,6 @@ public class RedisDTO {
     private String name = "";
     private String email = "";
     private String addr = "";
+    private String age = "";
     private String test_text = "";
 }

@@ -8,4 +8,6 @@ public interface IMyRedisMapper {
     RedisDTO getRedisString(String redisKey) throws Exception;
 
     int saveRedisStringJSON(String redisKey, RedisDTO pDTO) throws Exception;
+
+    RedisDTO getRedisStringJSON(String redisKey) throws Exception;
 }
