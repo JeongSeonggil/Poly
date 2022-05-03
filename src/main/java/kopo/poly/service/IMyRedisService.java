@@ -15,5 +15,5 @@ public interface IMyRedisService {
 
     int saveRedisList() throws Exception;
 
-    List<String> getRedisList() throws Exception;
+    List<RedisDTO> getRedisList(String redisKey) throws Exception;
 }

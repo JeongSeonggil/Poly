@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -87,14 +88,14 @@ public class RedisController {
         return ResponseEntity.status(500).body("fail");
     }
 
-    @GetMapping("/redis/getRedisList")
-    public List<String> getRedisList() throws Exception {
+    @GetMapping("/redis/getRedisList/{redisKey}")
+    public ResponseEntity<List<RedisDTO>> getRedisList(@PathVariable("redisKey") String redisKey) throws Exception {
         log.info(this.getClass().getName() + ".getRedisList Start!");
 
-        List<String> rList = myRedisService.getRedisList();
+        List<RedisDTO> rList = myRedisService.getRedisList(redisKey);
 
         log.info(this.getClass().getName() + ".getRedisList End!");
 
-        return rList;
+        return ResponseEntity.status(HttpStatus.OK).body(rList);
     }
 }

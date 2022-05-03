@@ -4,6 +4,7 @@ import kopo.poly.dto.RedisDTO;
 import kopo.poly.persistance.redis.IMyRedisMapper;
 import kopo.poly.util.CmmUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -120,7 +121,7 @@ public class MyRedisMapper implements IMyRedisMapper{
 
         pList.forEach(e -> {
             // 오름차순 정렬
-            redisDB.opsForList().rightPush(redisKey, CmmUtil.nvl(e.getTest_text()));
+            redisDB.opsForList().rightPush(redisKey, e);
 
             // 내림차순 정렬
 //            redisDB.opsForList().leftPush(redisKey, CmmUtil.nvl(e.getTest_text()));
@@ -137,17 +138,19 @@ public class MyRedisMapper implements IMyRedisMapper{
     }
 
     @Override
-    public List<String> getRedisList(String redisKey) throws Exception {
+    public List<RedisDTO> getRedisList(String redisKey) throws Exception {
         log.info(this.getClass().getName() + ".getRedisList Start!");
 
-        List<String> rList = null;
+        List<RedisDTO> rList = null;
 
         redisDB.setKeySerializer(new StringRedisSerializer());
-        redisDB.setValueSerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
 
         if (redisDB.hasKey(redisKey)) {
             rList = (List) redisDB.opsForList().range(redisKey, 0, -1);
 
+        } else {
+            throw new NotFoundException("Redis Key Error");
         }
 
         log.info(this.getClass().getName() + ".getRedisList End!");

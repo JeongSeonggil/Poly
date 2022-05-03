@@ -4,6 +4,7 @@ import kopo.poly.dto.RedisDTO;
 import kopo.poly.persistance.redis.IMyRedisMapper;
 import kopo.poly.service.IMyRedisService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -88,7 +89,8 @@ public class MyRedisService implements IMyRedisService {
         for (int i = 0; i < 10; i++) {
             RedisDTO redisDTO = new RedisDTO();
             redisDTO.setTest_text(i + "번째 데이터 입니다.");
-
+            redisDTO.setName("정성길");
+            redisDTO.setAddr("20");
             redisDTOList.add(redisDTO);
 
             redisDTO = null;
@@ -103,14 +105,13 @@ public class MyRedisService implements IMyRedisService {
     }
 
     @Override
-    public List<String> getRedisList() throws Exception {
+    public List<RedisDTO> getRedisList(String redisKey) throws Exception {
 
         log.info(this.getClass().getName() + ".getRedisList Start!");
-        String redisKey = "myRedis_List";
-        List<String> rList = myRedisMapper.getRedisList(redisKey);
+        List<RedisDTO> rList = myRedisMapper.getRedisList(redisKey);
 
         if (rList == null) {
-            rList = new LinkedList<>();
+            throw new NotFoundException("List Not Found");
         }
 
         log.info(this.getClass().getName() + ".getRedisList End!");
