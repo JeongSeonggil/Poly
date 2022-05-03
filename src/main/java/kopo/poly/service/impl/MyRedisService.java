@@ -82,7 +82,7 @@ public class MyRedisService implements IMyRedisService {
     public int saveRedisList() throws Exception {
         log.info(this.getClass().getName() + ".saveRedisList Start!");
 
-        String redisKey = "myRedisList";
+        String redisKey = "myRedis_List";
         List<RedisDTO> redisDTOList = new LinkedList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -100,5 +100,22 @@ public class MyRedisService implements IMyRedisService {
 
 
         return res;
+    }
+
+    @Override
+    public List<String> getRedisList() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisList Start!");
+        String redisKey = "myRedis_List";
+        List<String> rList = myRedisMapper.getRedisList(redisKey);
+
+        if (rList == null) {
+            rList = new LinkedList<>();
+        }
+
+        log.info(this.getClass().getName() + ".getRedisList End!");
+
+
+        return rList;
     }
 }

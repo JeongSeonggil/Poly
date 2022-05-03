@@ -135,4 +135,22 @@ public class MyRedisMapper implements IMyRedisMapper{
 
         return res;
     }
+
+    @Override
+    public List<String> getRedisList(String redisKey) throws Exception {
+        log.info(this.getClass().getName() + ".getRedisList Start!");
+
+        List<String> rList = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        if (redisDB.hasKey(redisKey)) {
+            rList = (List) redisDB.opsForList().range(redisKey, 0, -1);
+
+        }
+
+        log.info(this.getClass().getName() + ".getRedisList End!");
+        return rList;
+    }
 }

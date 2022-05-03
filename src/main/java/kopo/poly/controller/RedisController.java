@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -86,4 +87,14 @@ public class RedisController {
         return ResponseEntity.status(500).body("fail");
     }
 
+    @GetMapping("/redis/getRedisList")
+    public List<String> getRedisList() throws Exception {
+        log.info(this.getClass().getName() + ".getRedisList Start!");
+
+        List<String> rList = myRedisService.getRedisList();
+
+        log.info(this.getClass().getName() + ".getRedisList End!");
+
+        return rList;
+    }
 }

@@ -14,4 +14,6 @@ public interface IMyRedisMapper {
     RedisDTO getRedisStringJSON(String redisKey) throws Exception;
 
     int saveRedisList(String redisKey, List<RedisDTO> pList) throws Exception;
+
+    List<String> getRedisList(String redisKey) throws Exception;
 }
