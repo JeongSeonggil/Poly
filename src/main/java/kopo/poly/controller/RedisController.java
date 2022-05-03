@@ -3,6 +3,8 @@ package kopo.poly.controller;
 import kopo.poly.dto.RedisDTO;
 import kopo.poly.service.IMyRedisService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,4 +69,21 @@ public class RedisController {
 
         return redisDTO;
     }
+
+
+    @GetMapping("/redis/saveRedisList")
+    public ResponseEntity<String> saveRedisList() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisList Start!");
+        String msg = "";
+        int res = myRedisService.saveRedisList();
+
+        log.info(this.getClass().getName() + ".saveRedisList End!");
+        if (res == 1) {
+            // 성공
+            return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+        }
+
+        return ResponseEntity.status(500).body("fail");
+    }
+
 }

@@ -10,4 +10,6 @@ public interface IMyRedisService {
     int saveRedisStringJSON() throws Exception;
 
     RedisDTO getRedisStringJSON() throws Exception;
+
+    int saveRedisList() throws Exception;
 }

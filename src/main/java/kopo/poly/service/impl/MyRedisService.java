@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 @Service("MyRedisService")
@@ -74,5 +76,29 @@ public class MyRedisService implements IMyRedisService {
 
 
         return redisDTO;
+    }
+
+    @Override
+    public int saveRedisList() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisList Start!");
+
+        String redisKey = "myRedisList";
+        List<RedisDTO> redisDTOList = new LinkedList<>();
+
+        for (int i = 0; i < 10; i++) {
+            RedisDTO redisDTO = new RedisDTO();
+            redisDTO.setTest_text(i + "번째 데이터 입니다.");
+
+            redisDTOList.add(redisDTO);
+
+            redisDTO = null;
+        }
+
+        int res = myRedisMapper.saveRedisList(redisKey, redisDTOList);
+
+        log.info(this.getClass().getName() + ".saveRedisList End!");
+
+
+        return res;
     }
 }

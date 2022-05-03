@@ -9,6 +9,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -107,5 +108,31 @@ public class MyRedisMapper implements IMyRedisMapper{
 
 
         return redisDTO;
+    }
+
+    @Override
+    public int saveRedisList(String redisKey, List<RedisDTO> pList) throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisList Start!");
+        int res = 0;
+
+        redisDB.setValueSerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        pList.forEach(e -> {
+            // 오름차순 정렬
+            redisDB.opsForList().rightPush(redisKey, CmmUtil.nvl(e.getTest_text()));
+
+            // 내림차순 정렬
+//            redisDB.opsForList().leftPush(redisKey, CmmUtil.nvl(e.getTest_text()));
+        });
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisList End!");
+
+        return res;
     }
 }
