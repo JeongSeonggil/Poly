@@ -8,8 +8,10 @@ import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service("MyRedisService")
@@ -151,5 +153,29 @@ public class MyRedisService implements IMyRedisService {
 
 
         return rDto;
+    }
+
+    @Override
+    public int saveRedisSet() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisSet Start!");
+        Set<RedisDTO> pSet = new HashSet<>();
+
+        String redisKey = "myRedis_Set";
+        for (int i = 0; i < 10; i++) {
+            RedisDTO pDto = new RedisDTO();
+            pDto.setName("정성길");
+            pDto.setEmail("email");
+            pDto.setTest_text(i + ": Data");
+            pDto.setAddr("서울");
+
+            pSet.add(pDto);
+        }
+        log.info("for End");
+        int res = myRedisMapper.saveRedisSet(redisKey, pSet);
+
+        if (res == 0) {
+            throw new RuntimeException("Mapper Error");
+        }
+        return res;
     }
 }

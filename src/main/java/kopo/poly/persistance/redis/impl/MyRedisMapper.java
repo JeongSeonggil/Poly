@@ -11,11 +11,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component("MyRedisMapper")
-public class MyRedisMapper implements IMyRedisMapper{
+public class MyRedisMapper implements IMyRedisMapper {
 
     public final RedisTemplate<String, Object> redisDB;
 
@@ -211,4 +212,24 @@ public class MyRedisMapper implements IMyRedisMapper{
         return rDto;
     }
 
+    @Override
+    public int saveRedisSet(String redisKey, Set<RedisDTO> pSet) throws Exception {
+        log.info(this.getClass().getName() + ".saveRedis Set Start!");
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+        int res = 0;
+
+        pSet.forEach(redisDTO -> {
+            redisDB.opsForSet().add(redisKey, redisDTO);
+            redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        });
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedis Set End!");
+
+        return res;
+    }
 }

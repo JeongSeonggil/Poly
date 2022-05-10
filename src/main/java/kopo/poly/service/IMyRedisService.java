@@ -20,4 +20,6 @@ public interface IMyRedisService {
     int saveRedisHash() throws Exception;
 
     RedisDTO getRedisHash() throws Exception;
+
+    int saveRedisSet() throws Exception;
 }

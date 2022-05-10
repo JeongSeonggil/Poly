@@ -130,4 +130,19 @@ public class RedisController {
 
         return ResponseEntity.ok().body(rDto);
     }
+
+    @GetMapping("/redis/saveRedisSet")
+    public ResponseEntity<String> saveRedisSet() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisSet Start!");
+
+        int res = myRedisService.saveRedisSet();
+
+        log.info(this.getClass().getName() + ".saveRedisSet End!");
+        if (res == 0) {
+            return ResponseEntity.status(500).body("fail");
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body("success");
+        }
+
+    }
 }
