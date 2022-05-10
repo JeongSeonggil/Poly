@@ -119,4 +119,37 @@ public class MyRedisService implements IMyRedisService {
 
         return rList;
     }
+
+    @Override
+    public int saveRedisHash() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+        String redisKey = "myRedis_Hash";
+
+        RedisDTO pDto = new RedisDTO();
+        pDto.setName("정성길");
+        pDto.setEmail("dataofsg02@naver.com");
+        pDto.setAddr("서울");
+
+        int res = myRedisMapper.saveRedisHash(redisKey, pDto);
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return res;
+
+    }
+
+    @Override
+    public RedisDTO getRedisHash() throws Exception {
+        log.info(this.getClass().getName() + "getRedisHash Start!");
+        String RedisKey = "myRedis_Hash";
+
+        RedisDTO rDto = myRedisMapper.getRedisHash(RedisKey);
+
+        if (rDto == null) {
+            throw new NotFoundException("Not Found Value");
+        }
+
+
+        return rDto;
+    }
 }

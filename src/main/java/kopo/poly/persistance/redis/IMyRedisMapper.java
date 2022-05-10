@@ -16,4 +16,9 @@ public interface IMyRedisMapper {
     int saveRedisList(String redisKey, List<RedisDTO> pList) throws Exception;
 
     List<RedisDTO> getRedisList(String redisKey) throws Exception;
+
+    int saveRedisHash(String redisKey, RedisDTO redisDTO) throws Exception;
+
+    RedisDTO getRedisHash(String redisKey) throws Exception;
+
 }

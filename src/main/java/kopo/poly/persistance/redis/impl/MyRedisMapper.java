@@ -156,4 +156,59 @@ public class MyRedisMapper implements IMyRedisMapper{
         log.info(this.getClass().getName() + ".getRedisList End!");
         return rList;
     }
+
+    @Override
+    public int saveRedisHash(String redisKey, RedisDTO redisDTO) throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        int res = 0;
+
+        if (redisDB.hasKey(redisKey)) {
+            throw new NotFoundException("Check RedisKey");
+        }
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        redisDB.opsForHash().put(redisKey, "name", CmmUtil.nvl(redisDTO.getName()));
+        redisDB.opsForHash().put(redisKey, "email", CmmUtil.nvl(redisDTO.getEmail()));
+        redisDB.opsForHash().put(redisKey, "addr", CmmUtil.nvl(redisDTO.getAddr()));
+
+        redisDB.expire(redisKey, 100, TimeUnit.HOURS);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+        return res;
+
+    }
+
+    @Override
+    public RedisDTO getRedisHash(String redisKey) throws Exception {
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        RedisDTO rDto = new RedisDTO();
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new StringRedisSerializer());
+
+        if (redisDB.hasKey(redisKey)) {
+            String name = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "name"));
+            String email = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "email"));
+            String addr = CmmUtil.nvl((String) redisDB.opsForHash().get(redisKey, "addr"));
+
+            log.info("name : " + name);
+            log.info("email : " + email);
+            log.info("addr : " + addr);
+
+            rDto.setName(name);
+            rDto.setEmail(email);
+            rDto.setAddr(addr);
+        }
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDto;
+    }
+
 }

@@ -98,4 +98,36 @@ public class RedisController {
 
         return ResponseEntity.status(HttpStatus.OK).body(rList);
     }
+
+    @GetMapping("/redis/saveRedisHash")
+    private ResponseEntity<String> saveRedisHash() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        String msg;
+
+        int res = myRedisService.saveRedisHash();
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+        if (res == 1) {
+            msg = "success";
+            return ResponseEntity.status(HttpStatus.CREATED).body(msg);
+        }
+
+        msg = "fail";
+
+        return ResponseEntity.status(500).body(msg);
+
+
+    }
+
+    @GetMapping("/redis/getRedisHash")
+    public ResponseEntity<RedisDTO> getRedisHash() throws Exception {
+        log.info(this.getClass().getName() + ".getRedis Start!");
+
+
+        RedisDTO rDto = myRedisService.getRedisHash();
+
+
+        return ResponseEntity.ok().body(rDto);
+    }
 }
