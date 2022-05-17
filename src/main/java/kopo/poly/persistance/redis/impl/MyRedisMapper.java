@@ -10,6 +10,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -231,5 +232,83 @@ public class MyRedisMapper implements IMyRedisMapper {
         log.info(this.getClass().getName() + ".saveRedis Set End!");
 
         return res;
+    }
+
+
+    @Override
+    public Set<RedisDTO> getRedisSet(String redisKey) throws Exception {
+        log.info(this.getClass().getName() + ".getRedisSet Start");
+
+        Set<RedisDTO> rSet = new HashSet<>();
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            rSet = (Set) redisDB.opsForSet().members(redisKey);
+
+        } else {
+            throw new NotFoundException("RedisKey Not Found");
+        }
+
+        log.info(this.getClass().getName() + ".getRedisSet End!");
+        return rSet;
+    }
+
+    @Override
+    public int saveRedisZSetJson(String redisKey, List<RedisDTO> pList) throws Exception {
+        log.info(this.getClass().getName());
+
+        int res = 0;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        int idx = 0;
+
+        for (RedisDTO redisDTO : pList) {
+            redisDB.opsForZSet().add(redisKey, redisDTO, ++idx);
+
+        }
+
+
+        redisDB.expire(redisKey, 5, TimeUnit.HOURS);
+
+        res = 1;
+        log.info(this.getClass().getName());
+        return res;
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisZSetJson(String redisKey) throws Exception {
+        log.info(this.getClass().getName());
+        Set<RedisDTO> redisDTOZSet = null;
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+        redisDB.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisDTO.class));
+
+        if (redisDB.hasKey(redisKey)) {
+            log.info("1");
+            long cnt = redisDB.opsForZSet().size(redisKey);
+
+            redisDTOZSet = (Set) redisDB.opsForZSet().range(redisKey, 0, cnt);
+
+        }
+
+        log.info(this.getClass().getName());
+        return redisDTOZSet;
+    }
+
+    @Override
+    public boolean deleteDataJSON(String redisKey) throws Exception {
+        log.info(this.getClass().getName());
+
+        redisDB.setKeySerializer(new StringRedisSerializer());
+
+        if (redisDB.hasKey(redisKey)) {
+            redisDB.delete(redisKey);
+            return true;
+        }
+        log.info(this.getClass().getName());
+        return false;
     }
 }

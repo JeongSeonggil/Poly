@@ -24,4 +24,12 @@ public interface IMyRedisMapper {
 
     int saveRedisSet(String redisKey, Set<RedisDTO> pSet) throws Exception;
 
+    Set<RedisDTO> getRedisSet(String redisKey) throws Exception;
+
+    int saveRedisZSetJson(String redisKey, List<RedisDTO> pList) throws Exception;
+
+    Set<RedisDTO> getRedisZSetJson(String redisKey) throws Exception;
+
+    boolean deleteDataJSON(String redisKey) throws Exception;
 }
+

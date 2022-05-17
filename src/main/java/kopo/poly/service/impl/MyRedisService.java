@@ -178,4 +178,73 @@ public class MyRedisService implements IMyRedisService {
         }
         return res;
     }
+
+    @Override
+    public Set<RedisDTO> getRedisSet() throws Exception {
+        log.info(this.getClass().getName() + ".getRedisSet Start!");
+        String redisKey = "myRedis_Set";
+
+        Set<RedisDTO> redisDTOSet = myRedisMapper.getRedisSet(redisKey);
+
+        if (redisDTOSet.isEmpty()) {
+            throw new NotFoundException("Mapper Error");
+        }
+
+        log.info(this.getClass().getName() + ".getRedisSet End!");
+        return redisDTOSet;
+    }
+
+    @Override
+    public int saveRedisZSetJson() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisZSetJson");
+
+        String redisKey = "myRedis_ZSet";
+
+        int res = 0;
+
+        List<RedisDTO> redisDTOList = new LinkedList<>();
+
+        for (int i = 0; i < 10; i++) {
+            RedisDTO redisDTO = new RedisDTO();
+            redisDTO.setName("정성길");
+            redisDTO.setEmail("seonggil110*@naver.cc");
+            redisDTO.setTest_text("value : " + i);
+            redisDTOList.add(redisDTO);
+        }
+
+        res = myRedisMapper.saveRedisZSetJson(redisKey, redisDTOList);
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJson End!");
+        return res;
+    }
+
+    @Override
+    public Set<RedisDTO> getRedisZSetJson() throws Exception {
+        log.info(this.getClass().getName());
+        String redisKey = "myRedis_ZSet";
+
+        Set<RedisDTO> redisDTOSet = myRedisMapper.getRedisZSetJson(redisKey);
+
+        if (redisDTOSet.isEmpty()) {
+            throw new NotFoundException("ZSet Not Found");
+        }
+
+
+        log.info(this.getClass().getName());
+        return redisDTOSet;
+    }
+
+    @Override
+    public int deleteDataJSON(String redisKey) throws Exception {
+        log.info(this.getClass().getName());
+        log.info("RedisKey : " + redisKey);
+
+        if (myRedisMapper.deleteDataJSON(redisKey)) {
+            // Delete OK
+            return 1;
+        } else {
+            log.info(this.getClass().getName());
+            throw new NotFoundException("Cannot delete with " + redisKey);
+        }
+    }
 }

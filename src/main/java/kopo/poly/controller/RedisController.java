@@ -5,12 +5,14 @@ import kopo.poly.service.IMyRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -145,4 +147,63 @@ public class RedisController {
         }
 
     }
+
+    @GetMapping("/redis/getRedisSet")
+    public ResponseEntity<Set<RedisDTO>> getRedisSet() throws Exception {
+        log.info(this.getClass().getName() + ".getRedisSet Start!");
+
+        Set<RedisDTO> redisDTOSet = myRedisService.getRedisSet();
+
+        log.info(this.getClass().getName() + ".getRedisSet End!");
+        if (redisDTOSet.isEmpty()) {
+            return ResponseEntity.status(500).body(null);
+        } else {
+            return ResponseEntity.ok().body(redisDTOSet);
+        }
+
+
+    }
+
+    @GetMapping("/redis/saveRedisZSet")
+    public ResponseEntity<String> saveRedisZSet() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisZSet Start!");
+
+        int res = myRedisService.saveRedisZSetJson();
+
+        log.info(this.getClass().getName() + ".saveRedisZSet End!");
+
+        if (res != 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("success");
+    }
+
+    @GetMapping("/redis/getRedisZSetJson")
+    public ResponseEntity<Set<RedisDTO>> getRedisZSetJson() throws Exception {
+        log.info(this.getClass().getName());
+
+        Set<RedisDTO> redisDTOSet = myRedisService.getRedisZSetJson();
+
+        log.info(this.getClass().getName());
+
+        return ResponseEntity.ok().body(redisDTOSet);
+    }
+
+    @DeleteMapping("/redis/deleteDataJSON/{redisKey}")
+    public ResponseEntity<String> deleteDataJSON(@PathVariable String redisKey) throws Exception {
+        log.info(this.getClass().getName());
+
+        int res = myRedisService.deleteDataJSON(redisKey);
+
+
+        if (res != 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Key Error");
+        }
+
+        log.info(this.getClass().getName());
+
+        return ResponseEntity.status(HttpStatus.OK).body("DELETE END");
+    }
+
 }
